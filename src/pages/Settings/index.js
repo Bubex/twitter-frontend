@@ -35,6 +35,7 @@ export default function Settings() {
         const formData = new FormData();
         formData.append('file', e.target.files[0]);
         const { data } = await api.post('/pictures/upload', formData);
+        console.logo(data);
         myType === 'avatar' ? setAvatar(data.path) : setCover(data.path);
     }
 
