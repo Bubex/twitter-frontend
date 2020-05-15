@@ -7,7 +7,7 @@ export const Container = styled.div`
 
     .cover {
         width: 100%;
-        height: 200px;
+        height: 400px;
 
         img {
             width: 100%;
