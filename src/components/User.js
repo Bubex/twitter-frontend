@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaMapMarkerAlt, FaLink, FaRegClock } from 'react-icons/fa';
 
@@ -7,7 +8,6 @@ export const Style = styled.div`
     border: 1px solid #d8d8d8;
     border-radius: 5px;
     display: flex;
-    cursor: pointer;
     background: white;
 
     img {
@@ -18,12 +18,14 @@ export const Style = styled.div`
 
     .name {
         font-weight: 600;
+        color: black;
     }
 
     .user, .joined, a, label, svg {
         color: grey;
         font-size: 14px;
         margin-left: 5px;
+        text-decoration: none;
     }
 
     svg {
@@ -31,12 +33,14 @@ export const Style = styled.div`
     }
 
     p {
-        margin-top: 10px;
+        font-size: 14px;
+        margin: 5px;
     }
 
     :hover {
         background: #e8e8e8;
     }
+
 `;
 
 export default function User({ user }) {
@@ -47,13 +51,13 @@ export default function User({ user }) {
 
     return(
         <Style>
-            <img src={user.avatar ?? 'https://vectorified.com/images/google-user-icon-19.png'} alt="Avatar"/>
+            <img src={user.avatar} alt="Avatar"/>
             <div>
-                <span className="name">{user.name}</span>
-                <span className="user">@{user.username}</span>
-                <p>{user.bio}</p>
-                {user.location ? <><FaMapMarkerAlt/><label>{user.location}</label></> : null}
-                {user.website ? <><FaLink/><a href={user.website}>{user.website}</a></> : null}
+                <Link to={`/profile/${user.username}`}><span className="name">{user.name}</span></Link>
+                <Link to={`/profile/${user.username}`}><span className="user">@{user.username}</span></Link><br/>
+                {user.bio ? <><p>{user.bio}</p></> : null }
+                {user.location ? <><FaMapMarkerAlt/><label>{user.location}</label><br/></> : null}
+                {user.website ? <><FaLink/><a href={user.website} target="_blank" rel="noopener noreferrer">{user.website}</a><br/></> : null}
                 <FaRegClock/><label>Joined {pMonth} {pYear}</label>
             </div>
         </Style>

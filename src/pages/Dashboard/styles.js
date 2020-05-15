@@ -7,6 +7,7 @@ export const Container = styled.div`
     margin: auto;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 15px;
     align-items: flex-start;
 
     .profile {
@@ -37,10 +38,7 @@ export const Container = styled.div`
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 10px 15px;
-            margin: 0 10px;
             border-radius: 5px;
-            /* background: #1da1f240; */
 
             img {
                 width: 30px;
@@ -84,7 +82,30 @@ export const Container = styled.div`
         }
 
         .tweets {
-            padding: 0 5px;
+            margin-top: 20px;
+        }
+    }
+
+    .utilities {
+        width: 100%;
+        margin-bottom: auto;
+        margin-top: 15px;
+        padding: 5px;
+        background: white;
+        border-radius: 5px;
+        
+        h1 {
+            display: inline-block;
+            font-size: 16px;
+            color: #535454;
+            margin: 10px 10px;
+        }
+
+        button {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: grey;
         }
     }
 `;

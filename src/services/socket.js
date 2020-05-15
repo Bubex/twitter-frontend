@@ -12,6 +12,10 @@ function subscribeToUpdateProfile(subscribeFunction) {
     socket.on('update-profile', subscribeFunction);
 }
 
+function subscribeToUpdateDashboard(subscribeFunction) {
+    socket.on('update-dashboard', subscribeFunction);
+}
+
 function connect(me, listening) {
     socket.io.opts.query = { me, listening };
     socket.connect();
@@ -27,5 +31,6 @@ export {
     connect,
     disconnect,
     subscribeToUpdateMe,
-    subscribeToUpdateProfile
+    subscribeToUpdateProfile,
+    subscribeToUpdateDashboard
 };

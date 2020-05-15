@@ -1,42 +1,55 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Form } from '@unform/web';
 import PulseLoader from 'react-spinners/PulseLoader';
 import HashLoader from 'react-spinners/HashLoader';
 import update from 'immutability-helper';
+import { Form } from '@unform/web';
 import * as _ from 'lodash';
 
 import api from '../../services/api';
 import { connect, disconnect, subscribeToUpdateMe } from '../../services/socket';
 import { Context } from '../../contexts/AuthContext';
+import { Container, Content } from './styles';
+
 import Textarea from '../../components/Textarea';
 import Tweet from '../../components/Tweet';
-import { Container, Content } from './styles';
+import User from '../../components/User';
 
 export default function Dashboard() {
     const { profileInfo, setProfileInfo, setHeaderTab } = useContext(Context);
     const [ loading, setLoading ] = useState(true);
     const [ sending, setSending ] = useState(false);
+    const [ whoToFollow, setWhoFollow ] = useState([]);
     const [ tweets, setTweets ] = useState([]);
 
     useEffect(() => {
         (async function() {
             try {
                 setLoading(true);
-                const { data } = await api.get('/timeline');
-                setTweets(data);
+                const response1 = await api.get('/timeline');
+                setTweets(response1.data);
+
+                const response2 = await api.post('/who-to-follow', {
+                    count: 3
+                });
+                setWhoFollow(response2.data);
+                
             } catch (err) {
                 console.log(err);
             } finally {
                 setLoading(false);
             }
         })();
+
         setHeaderTab(1);
-    // eslint-disable-next-line
+
+        setupWebSocket();
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        setupWebSocket();
         subscribeToUpdateMe(me => setProfileInfo(me));
+        // eslint-disable-next-line
     }, [profileInfo]);
 
     function setupWebSocket() {
@@ -53,6 +66,7 @@ export default function Dashboard() {
             if(data.error) return console.log(data.error);
             const newTweetList = update(tweets, { $unshift: [data] });
             setTweets(newTweetList);
+            document.getElementById('tweet-form').reset();
         } catch (err) {
             console.log(err);
         } finally {
@@ -64,10 +78,10 @@ export default function Dashboard() {
         <Container>
             <div className="profile">
                 <div className="resume">
-                    <img src={profileInfo.cover ?? 'https://www.millenefits.com/wp-content/uploads/2017/06/twitter-background.jpg'} alt="Cover"/>
+                    <img src={profileInfo.cover} alt="Cover"/>
                     <Content>
                         <div className="user">
-                            <img src={profileInfo.avatar ?? 'https://vectorified.com/images/google-user-icon-19.png'} alt="Avatar"/>
+                            <img src={profileInfo.avatar} alt="Avatar"/>
                             <div>
                                 <h1>{profileInfo.name}</h1>
                                 <span>@{profileInfo.username}</span>
@@ -91,13 +105,11 @@ export default function Dashboard() {
             </div>
             <div className="timeline">
                 <div className="new-tweet">
-                    <img src={profileInfo.avatar ?? 'https://vectorified.com/images/google-user-icon-19.png'} alt="Avatar"/>
-                    <Form onSubmit={handleTweet}>
+                    <img src={profileInfo.avatar} alt="Avatar"/>
+                    <Form onSubmit={handleTweet} id="tweet-form">
                         <Textarea name="text" placeholder="What's happening?"/>
                         <button type="submit" disabled={sending}>
-                        {sending
-                        ? <PulseLoader size={8} color={"white"} loading={sending} />
-                        : 'Tweet'}
+                            {sending ? <PulseLoader size={8} color={"white"} loading={sending} /> : 'Tweet'}
                         </button>
                     </Form>
                 </div>
@@ -111,7 +123,10 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className="utilities">
-
+                <h1>Who to follow</h1> - <button>Refresh</button>
+                <div className="profiles">
+                    {whoToFollow ? whoToFollow.map(p => <User key={p._id} user={p}/>) : null}
+                </div>
             </div>
         </Container>
     )

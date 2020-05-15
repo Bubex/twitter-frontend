@@ -22,4 +22,33 @@ export default createGlobalStyle`
     button {
         cursor: pointer;
     }
+
+    .save-notific {
+        width: 100%;
+        position: fixed;
+        background: #2fab33;
+        z-index: 50;
+
+        button {
+            padding: 10px 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            background: transparent;
+        }
+        
+        h1 {
+            font-size: 20px;
+        }
+
+        svg {
+            margin-right: 7px;
+            font-size: 20px;
+        }
+    }
 `;

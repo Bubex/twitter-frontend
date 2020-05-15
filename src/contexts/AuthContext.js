@@ -33,12 +33,16 @@ function AuthProvider({ children }) {
                 const { data } = await api.get('/index');
                 setProfileInfo(data);
             }
+            
             setLoading(false);
+
+            setupWebSocket();
         })();
+
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        setupWebSocket();
         subscribeToUpdateMe(me => setProfileInfo(me));
     }, [profileInfo]);
 

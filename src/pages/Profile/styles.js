@@ -218,3 +218,32 @@ export const Tweet = styled.div`
         background: #e8e8e8;
     }
 `;
+
+export const EditProfile = styled.div`
+    width: 100%;
+    height: 60px;
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        background: #2fab33;
+
+        :hover {
+
+        }
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+
+    svg {
+        margin-right: 7px;
+        font-size: 20px;
+    }
+`;
