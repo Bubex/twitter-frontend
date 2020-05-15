@@ -41,7 +41,7 @@ function AuthProvider({ children }) {
             setLoading(false);
         })();
 
-        return () => {disconnect};
+        return () => {disconnect()};
         // eslint-disable-next-line
     }, []);
 
