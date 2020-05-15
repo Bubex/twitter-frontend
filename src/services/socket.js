@@ -1,6 +1,6 @@
 import socketio from 'socket.io-client';
 
-const socket = socketio('http://127.0.0.1:3333/', {
+const socket = socketio(process.env.REACT_APP_API_URL, {
     autoConnect: false,
 });
 
@@ -12,13 +12,13 @@ function subscribeToUpdateProfile(subscribeFunction) {
     socket.on('update-profile', subscribeFunction);
 }
 
-function subscribeToUpdateDashboard(subscribeFunction) {
-    socket.on('update-dashboard', subscribeFunction);
-}
-
 function connect(me, listening) {
     socket.io.opts.query = { me, listening };
-    socket.connect();
+
+    if(me !== undefined && listening !== undefined) {
+        console.log('nova conexão: ' + me + ' - ' + listening);
+        socket.connect();
+    }
 }
 
 function disconnect() {
@@ -31,6 +31,5 @@ export {
     connect,
     disconnect,
     subscribeToUpdateMe,
-    subscribeToUpdateProfile,
-    subscribeToUpdateDashboard
+    subscribeToUpdateProfile
 };

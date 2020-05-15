@@ -13,8 +13,8 @@ import logoBlue from '../../assets/logo-blue.png';
 
 const schema = Yup.object().shape({
     username: Yup.string()
-                .min(4, 'Your username must be between 4 and 16 characters')
-                .max(16, 'Your username must be between 4 and 16 characters')
+                .min(4, 'Your username must be between 4 and 24 characters')
+                .max(24, 'Your username must be between 4 and 24 characters')
                 .matches('^[a-zA-Z0-9]*$', 'Your username cannot contain blanks or special characters'),
     name: Yup.string().min(3, 'Your name must be at least 3 characters').required('Enter your fullname'),
     email: Yup.string().email('Enter a valid email').required('An email is required'),
@@ -48,11 +48,10 @@ export default function Login() {
             localStorage.setItem('TWITTER@JWT_TOKEN', data.token);
             api.defaults.headers.Authorization = `Bearer ${data.token}`;
             setAuthenticated(true);
-
             localStorage.setItem('TWITTER@PROFILE', JSON.stringify(data.user));
             setProfileInfo(data.user);
-
             history.push('/');
+
         } catch (err) {
             const validationErrors = {};
             if (err instanceof Yup.ValidationError) {
@@ -71,10 +70,10 @@ export default function Login() {
             <img src={logoBlue} width="34px" alt="Twitter" />
             <h1>Sign in to Twitter</h1>
             <Form schema={schema} onSubmit={handleRegister} ref={formRef} >
-                <Input name="name" placeholder="Full name"/>
-                <Input name="username" placeholder="Username"/>
+                <Input name="name" placeholder="Full name" minlength="3" />
+                <Input name="username" placeholder="Username" minlength="4" maxlength="24"/>
                 <Input name="email" type="email" placeholder="E-mail"/>
-                <Input name="password" type="password" placeholder="Password"/>
+                <Input name="password" type="password" placeholder="Password" minlength="8"/>
                 <Input name="password2" type="password" placeholder="Confirm Password"/>
                 {message != null ? <span>{message}</span> : null}
                 <button type="submit" disabled={loading}>

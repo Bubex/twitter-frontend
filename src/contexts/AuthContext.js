@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useState } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { css } from '@emotion/core';
 import PulseLoader from 'react-spinners/PulseLoader';
 
@@ -20,6 +20,11 @@ function AuthProvider({ children }) {
     const [ profileInfo, setProfileInfo ] = useState([]);
     const [ headerTab, setHeaderTab ] = useState(1);
 
+    const setupWebSocket = useCallback(() => {
+        disconnect();
+        connect(profileInfo.username, profileInfo.username);
+    }, [profileInfo.username]);
+
     useEffect(() => {
         (async function() {
             setLoading(true);
@@ -29,27 +34,20 @@ function AuthProvider({ children }) {
             if(token) {
                 api.defaults.headers.Authorization = `Bearer ${token}`;
                 setAuthenticated(true);
-
                 const { data } = await api.get('/index');
                 setProfileInfo(data);
             }
-            
-            setLoading(false);
-
             setupWebSocket();
+            setLoading(false);
         })();
 
+        return () => {disconnect};
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         subscribeToUpdateMe(me => setProfileInfo(me));
-    }, [profileInfo]);
-
-    function setupWebSocket() {
-        disconnect();
-        connect(profileInfo.username, profileInfo.username);
-    }
+    }, [profileInfo, setupWebSocket]);
 
     if(loading){
         return (

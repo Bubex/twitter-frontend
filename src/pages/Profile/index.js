@@ -16,7 +16,7 @@ import { EditProfile, Container, Content } from './styles';
 export default function Profile() {
     const { profileInfo, setHeaderTab } = useContext(Context);
 
-    const [ isFollowing ] = useState(false);
+    const [ isFollowing, setIsFollowing ] = useState(false);
     const [ profile, setProfile ] = useState([]);
     const [ activatedTab, setActivatedTab ] = useState(1);
     const { username } = useParams();
@@ -27,7 +27,7 @@ export default function Profile() {
                 const { data } = await api.get(`/profile/${username}`);
                 if(data.error) history.push('/');
                 setProfile(data);
-                // data.followers.filter(p => { if(p._id === profileInfo._id) setIsFollowing(true) });
+                data.followers.filter(p => { if(p._id === profileInfo._id) setIsFollowing(true) });
             } catch (err) {
                 console.log(err);
             }
@@ -42,6 +42,7 @@ export default function Profile() {
 
     useEffect(() => {
         subscribeToUpdateProfile(newProfile => setProfile(newProfile));
+        console.log('houve alteração no perfil')
     }, [profile]);
 
     function setupWebSocket() {

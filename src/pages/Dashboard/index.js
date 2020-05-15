@@ -74,6 +74,17 @@ export default function Dashboard() {
         }
     }
 
+    async function refreshWhoToFollow() {
+        try {
+            const { data } = await api.post('/who-to-follow', {
+                count: 3
+            });
+            setWhoFollow(data);
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <Container>
             <div className="profile">
@@ -123,7 +134,7 @@ export default function Dashboard() {
                 </div>
             </div>
             <div className="utilities">
-                <h1>Who to follow</h1> - <button>Refresh</button>
+                <h1>Who to follow</h1> - <button onClick={refreshWhoToFollow}>Refresh</button>
                 <div className="profiles">
                     {whoToFollow ? whoToFollow.map(p => <User key={p._id} user={p}/>) : null}
                 </div>

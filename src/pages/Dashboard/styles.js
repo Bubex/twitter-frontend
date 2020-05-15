@@ -128,6 +128,7 @@ export const Content = styled.div`
             border-radius: 100%;
             margin: -50px 10px 0 10px;
             background: white;
+            border: 2px solid white;
         }
 
         h1 {
